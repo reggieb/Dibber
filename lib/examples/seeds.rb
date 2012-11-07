@@ -1,4 +1,4 @@
-Seeder = Dibble::Seeder
+Seeder = Dibber::Seeder
 
 # Set up the path to seed YAML files
 Seeder.seeds_path = "#{Rails.root}/db/seeds"
