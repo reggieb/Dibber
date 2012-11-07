@@ -1,14 +1,14 @@
 == Dibber
 
-A set of tool to tidy up rails seeds.rb files.
+A set of tools to tidy up rails seeds.rb files.
 
 Dibber has two compoments:
 
 === Seeder
-is designed to simplify the process of pulling attributes from
+Seeder is designed to simplify the process of pulling attributes from
 YAML files, and populating ActiveRecord objects with those attributes.
 
 === ProcessLog
-provides Seeder with a simple before and after reporting tool.
+ProcessLog provides Seeder with a simple before and after reporting tool.
 
-Have a look at the examples folder, for a guide to how Dibber is used.
+Have a look at the lib/examples folder, for a guide to how Dibber is used.

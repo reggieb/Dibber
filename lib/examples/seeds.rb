@@ -20,9 +20,9 @@ AdminUser.create!(
   :password_confirmation => password
 ) unless AdminUser.exists?(:email => admin_email)
 
-# Example 3. Seeder grabs the attributes from the YAML and build a 
+# Example 3. Seeder grabs the attributes from the YAML and builds a 
 # set of Fee objects with those attributes (or updates them if 
-# they already exist. 
+# they already exist). 
 # Note that the build process requires the model to have a name field.
 Seeder.new(Fee, 'fees.yml').build
 
@@ -33,5 +33,5 @@ Seeder.new(Disclaimer::Document, 'disclaimer/documents.yml').build
 Seeder.new(Category, 'categories.yml', 'description').build
 
 # Output a report showing how the numbers of each type of object
-# have changed through the process.
+# have changed through the process. Also has a log of start and end time.
 puts Seeder.report
