@@ -32,9 +32,9 @@ Seeder.new(Disclaimer::Document, 'disclaimer/documents.yml').build
 # Example 5. Seeder using values in the yaml file to set a single field
 Seeder.new(Category, 'categories.yml', 'description').build
 
+# You can also access Seeders attached process log, and set up a custom log
+Seeder.process_log.start('First questionnaire questions', 'Questionnaire.count > 0 ? Questionnaire.first.questions.length : 0')
+
 # Output a report showing how the numbers of each type of object
 # have changed through the process. Also has a log of start and end time.
 puts Seeder.report
-
-# You can also access Seeders attached process log, and set up a custom log
-Seeder.process_log.start('First questionnaire questions', 'Questionnaire.count > 0 ? Questionnaire.first.questions.length : 0')
