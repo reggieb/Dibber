@@ -1,4 +1,4 @@
-require_relative 'process_log'
+require 'process_log'
 
 process_log = ProcessLog.new
 process_log.start :time_one, 'Time.now'

@@ -8,7 +8,7 @@ module Dibber
 
     def self.start_process_log
       @process_log = ProcessLog.new
-      @process_log.start :time, 'Time.now.to_s(:long_time)'
+      @process_log.start :time, 'Time.now.strftime("%Y-%b-%d %H:%M:%S.%3N %z")'
       return @process_log
     end
 
