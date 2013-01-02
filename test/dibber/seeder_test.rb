@@ -80,6 +80,25 @@ module Dibber
       assert_equal({'title' => 'one'}, foo.other_method)
     end
     
+    def test_other_method_replacing_attributes_via_args
+      thing_seeder(:attributes_method => 'other_method').build
+      foo = Thing.find_or_initialize_by_name(:foo)
+      bar = Thing.find_or_initialize_by_name(:bar)
+      assert_equal([foo, bar], Thing.saved)
+      assert_nil(foo.attributes)
+      assert_equal({'title' => 'one'}, foo.other_method)
+    end
+    
+    def test_alternative_name_method
+      thing_seeder(:name_method => 'other_method').build
+      assert_equal(2, Thing.count)
+      foo = Thing.find_or_initialize_by_other_method(:foo)
+      bar = Thing.find_or_initialize_by_other_method(:bar)
+      assert_equal([foo, bar], Thing.saved)
+      assert_equal({'title' => 'one'}, foo.attributes)
+    end
+    
+    
     private
     def thing_seeder(method = 'attributes')
       @thing_seeder = Seeder.new(Thing, 'things.yml', method)

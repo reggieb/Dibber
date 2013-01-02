@@ -3,7 +3,7 @@ require 'yaml'
 
 module Dibber
   class Seeder
-    attr_accessor :klass, :file, :method
+    attr_accessor :klass, :file, :attribute_method, :name_method
 
     def self.process_log
       @process_log || start_process_log
@@ -37,18 +37,20 @@ module Dibber
     end
 
 
-    def initialize(klass, file, method = 'attributes')
+    def initialize(klass, file, args = {})
       @klass = klass
       @file = file
-      @method = method
+      args = {:attributes_method => args} unless args.kind_of?(Hash)
+      @attribute_method = args[:attributes_method] || 'attributes'
+      @name_method = args[:name_method] || 'name'
     end
 
     def build
       start_log
       check_objects_exist
       objects.each do |name, attributes|
-        object = klass.find_or_initialize_by_name(name)
-        object.send("#{method}=", attributes)
+        object = klass.send(retrieval_method, name)
+        object.send("#{attribute_method}=", attributes)
         object.save
       end
     end
@@ -68,6 +70,10 @@ module Dibber
     
     def check_objects_exist
       raise "No objects returned from file: #{self.class.seeds_path}#{file}" unless objects
+    end
+    
+    def retrieval_method
+      "find_or_initialize_by_#{name_method}"
     end
 
   end

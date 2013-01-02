@@ -21,6 +21,17 @@ class Thing
     end
   end
   
+  def self.find_or_initialize_by_other_method(data)
+    existing = members.select{|m| m.other_method == data.to_s}
+    if existing.empty?
+      thing = new
+      thing.other_method = data.to_s
+      thing
+    else
+      existing.first
+    end
+  end
+  
   def self.members
     @members ||= []
   end

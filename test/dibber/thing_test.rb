@@ -70,6 +70,11 @@ module Dibber
       assert_equal([], Thing.saved)
     end
     
+    def test_find_or_initialize_by_other_method
+      thing = Thing.find_or_initialize_by_other_method(:something)
+      assert_nil(thing.name)
+      assert_equal('something', thing.other_method)
+    end
     
   end
 
