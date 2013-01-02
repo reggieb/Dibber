@@ -1,3 +1,6 @@
+require 'active_support/inflector'
+require 'yaml'
+
 module Dibber
   class Seeder
     attr_accessor :klass, :file, :method
@@ -13,7 +16,7 @@ module Dibber
     end
 
     def self.report
-      @process_log.report
+      process_log.report
     end
 
     def self.monitor(klass)
@@ -42,6 +45,7 @@ module Dibber
 
     def build
       start_log
+      check_objects_exist
       objects.each do |name, attributes|
         object = klass.find_or_initialize_by_name(name)
         object.send("#{method}=", attributes)
@@ -54,12 +58,16 @@ module Dibber
     end
 
     def objects
-      self.class.objects_from(file)
+      @objects ||= self.class.objects_from(file)
     end
 
     private
     def self.raise_no_seeds_path_error
       raise "You must set the path to your seed files via Seeder.seeds_path = 'path/to/seed/files'"
+    end
+    
+    def check_objects_exist
+      raise "No objects returned from file: #{self.class.seeds_path}#{file}" unless objects
     end
 
   end

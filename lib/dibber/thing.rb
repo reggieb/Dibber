@@ -32,4 +32,9 @@ class Thing
   def self.saved
     @saved ||= []
   end
+  
+  def self.clear_all
+    @members = []
+    @saved = []
+  end
 end
