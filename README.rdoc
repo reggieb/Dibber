@@ -5,10 +5,53 @@ A set of tools to tidy up rails seeds.rb files.
 Dibber has two compoments:
 
 === Seeder
+
 Seeder is designed to simplify the process of pulling attributes from
 YAML files, and populating ActiveRecord objects with those attributes.
 
 === ProcessLog
+
 ProcessLog provides Seeder with a simple before and after reporting tool.
 
-Have a look at the lib/examples folder, for a guide to how Dibber is used.
+=== Installation
+
+Add this to your Gemfile:
+
+    gem 'dibber'
+
+=== Examples
+
+You have a rails app with a Thing model, and you want to seed it with some 
+things. Thing instances have the attributes 'name', 'colour', 'size'.
+You have a YAML file '/db/seeds/things.yml' that looks like this:
+
+    foo:
+      colour: red
+      size: large
+
+    bar:
+      colour: blue
+      size: small
+
+Add this to your 'db/seeds.rb'
+
+    Seeder = Dibber::Seeder
+    Seeder.seeds_path = "#{Rails.root}/db/seeds"
+    Seeder.new(Thing, 'things.yml').build
+
+Then run 'rake db:seed'
+
+Seeder will create two new things (unless things with the names 'foo' or
+'bar' already exist, in which case it will update those things with the 
+values in the YAML file). 
+
+You'll then be able to do this:
+
+    thing = Thing.find_by_name(:foo)
+    thing.colour    ---> 'red'
+    
+Each time seeds.rb is run, Seeder will output a report detailing start and 
+end time, and a log of how the number of things has changed.
+
+Have a look at the lib/examples folder, for a more detailed guide to how 
+Dibber is used.

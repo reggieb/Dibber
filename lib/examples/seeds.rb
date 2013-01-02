@@ -23,14 +23,26 @@ AdminUser.create!(
 # Example 3. Seeder grabs the attributes from the YAML and builds a 
 # set of Fee objects with those attributes (or updates them if 
 # they already exist). 
-# Note that the build process requires the model to have a name field.
+# Note that the build process defaults to using a 'name' field to store 
+# the root key.
 Seeder.new(Fee, 'fees.yml').build
 
-# Example 4. Seeder working with a name spaced object
+# Example 4. Seeder using an alternative name field
+Seeder.new(Fee, 'fees.yml', :name_field => :title).build
+
+# Example 5. Seeder working with a name spaced object
 Seeder.new(Disclaimer::Document, 'disclaimer/documents.yml').build
 
-# Example 5. Seeder using values in the yaml file to set a single field
+# Example 6. Seeder using values in the yaml file to set a single field
 Seeder.new(Category, 'categories.yml', 'description').build
+
+# Example 7. Seeder using alternative name and attributes fields
+Seeder.new(
+  Category, 
+  'categories.yml', 
+  :name_field => :title, 
+  :attributes_field => :description
+).build
 
 # You can also access Seeders attached process log, and set up a custom log
 Seeder.process_log.start('First questionnaire questions', 'Questionnaire.count > 0 ? Questionnaire.first.questions.length : 0')
