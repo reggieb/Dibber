@@ -40,8 +40,8 @@ Seeder.new(Category, 'categories.yml', 'description').build
 Seeder.new(
   Category, 
   'categories.yml', 
-  :name_field => :title, 
-  :attributes_field => :description
+  :name_method => :title, 
+  :attributes_method => :description
 ).build
 
 # You can also access Seeders attached process log, and set up a custom log
