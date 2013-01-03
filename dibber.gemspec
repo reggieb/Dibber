@@ -14,5 +14,5 @@ Gem::Specification.new do |s|
   s.files = Dir["lib/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["test/**/*"]
   
-  s.add_dependency 'active_support'
+  s.add_development_dependency 'active_support'
 end
