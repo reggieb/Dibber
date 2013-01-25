@@ -38,6 +38,7 @@ Add this to your 'db/seeds.rb'
     Seeder = Dibber::Seeder
     Seeder.seeds_path = "#{Rails.root}/db/seeds"
     Seeder.new(Thing, 'things.yml').build
+    puts Seeder.report
 
 Then run 'rake db:seed'
 
