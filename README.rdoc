@@ -42,17 +42,29 @@ Add this to your 'db/seeds.rb'
 
 Then run 'rake db:seed'
 
-Seeder will create two new things (unless things with the names 'foo' or
-'bar' already exist, in which case it will update those things with the 
-values in the YAML file). 
+Seeder will create two new things. 
 
 You'll then be able to do this:
 
     thing = Thing.find_by_name(:foo)
     thing.colour    ---> 'red'
-    
+ 
+== Report  
+ 
 Each time seeds.rb is run, Seeder will output a report detailing start and 
 end time, and a log of how the number of things has changed.
+
+== Overwriting existing entries
+
+As of version 0.2.0, Seeder#build will not overwrite existing data unless 
+directed to do so. 
+
+   thing.update_attribute(:colour, 'black')
+   Seeder.new(Thing, 'things.yml').build
+   thing.reload.colour  ----> 'black'
+
+   Seeder.new(Thing, 'things.yml', :overwrite => true).build
+   thing.reload.colour  ----> 'red'
 
 Have a look at the lib/examples folder, for a more detailed guide to how 
 Dibber is used.

@@ -71,7 +71,31 @@ module Dibber
       assert_equal({'title' => 'one'}, foo.attributes)
     end
     
-    def test_other_method_replacing_attributes
+    def test_rebuilding_does_not_overwrite
+      test_build
+      attributes = {'title' => 'something else'}
+      foo = Thing.find_or_initialize_by_name(:foo)
+      foo.attributes = attributes
+      foo.save
+      thing_seeder.build
+      assert_equal(2, Thing.count)
+      foo = Thing.find_or_initialize_by_name(:foo)
+      assert_equal(attributes, foo.attributes)
+    end
+    
+    def test_rebuilding_does_overwrite_if_set_to
+      test_build
+      attributes = {'title' => 'something else'}
+      foo = Thing.find_or_initialize_by_name(:foo)
+      foo.attributes = attributes
+      foo.save
+      thing_seeder(:overwrite => true).build
+      assert_equal(2, Thing.count)
+      foo = Thing.find_or_initialize_by_name(:foo)
+      assert_equal({'title' => 'one'}, foo.attributes)
+    end    
+    
+    def test_other_method_instead_of_attributes
       thing_seeder('other_method').build
       foo = Thing.find_or_initialize_by_name(:foo)
       bar = Thing.find_or_initialize_by_name(:bar)

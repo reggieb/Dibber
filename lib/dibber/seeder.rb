@@ -3,7 +3,7 @@ require 'yaml'
 
 module Dibber
   class Seeder
-    attr_accessor :klass, :file, :attribute_method, :name_method
+    attr_accessor :klass, :file, :attribute_method, :name_method, :overwrite
 
     def self.process_log
       @process_log || start_process_log
@@ -43,6 +43,7 @@ module Dibber
       args = {:attributes_method => args} unless args.kind_of?(Hash)
       @attribute_method = args[:attributes_method] || 'attributes'
       @name_method = args[:name_method] || 'name'
+      @overwrite = args[:overwrite]
     end
 
     def build
@@ -50,8 +51,10 @@ module Dibber
       check_objects_exist
       objects.each do |name, attributes|
         object = klass.send(retrieval_method, name)
-        object.send("#{attribute_method}=", attributes)
-        object.save
+        if overwrite or !object.send("#{attribute_method}")
+          object.send("#{attribute_method}=", attributes) 
+          object.save
+        end
       end
     end
 
