@@ -1,6 +1,6 @@
-require 'process_log'
+require_relative '../dibber/process_log'
 
-process_log = ProcessLog.new
+process_log = Dibber::ProcessLog.new
 process_log.start :time_one, 'Time.now'
 sleep(2)
 process_log.finish :time_one
