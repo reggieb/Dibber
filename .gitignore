@@ -3,4 +3,4 @@
 .ruby-*
 
 # This is a gem loaded into other apps, so should not lock Gems at this level
-Gemfile.lock 
+Gemfile.lock
