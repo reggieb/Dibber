@@ -28,7 +28,7 @@ AdminUser.create!(
 Seeder.new(Fee, 'fees.yml').build
 
 # Example 4. Seeder using an alternative name field
-Seeder.new(Fee, 'fees.yml', :name_field => :title).build
+Seeder.new(Fee, 'fees.yml', :name_method => :title).build
 
 # Example 5. Seeder working with a name spaced object
 Seeder.new(Disclaimer::Document, 'disclaimer/documents.yml').build
