@@ -8,8 +8,12 @@ class Thing
   end
   
   def save
-    self.class.saved << self unless self.class.saved.include? self
+    self.class.saved << self if new_record?
     true
+  end
+  
+  def new_record?
+    !self.class.saved.include? self
   end
   
   def self.find_or_initialize_by_name(name)

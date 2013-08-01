@@ -51,7 +51,7 @@ module Dibber
       check_objects_exist
       objects.each do |name, attributes|
         object = klass.send(retrieval_method, name)
-        if overwrite or !object.send("#{attribute_method}")
+        if overwrite or object.new_record?
           object.send("#{attribute_method}=", attributes) 
           object.save
         end
