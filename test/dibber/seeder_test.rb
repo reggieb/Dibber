@@ -121,6 +121,26 @@ module Dibber
       assert_equal([foo, bar], Thing.saved)
       assert_equal({'title' => 'one'}, foo.attributes)
     end
+
+    def test_seeds_path_with_none_set
+      Seeder.seeds_path = nil
+      assert_raise RuntimeError do
+        Seeder.seeds_path
+      end
+    end
+
+    module DummyRails
+      def self.root
+        '/some/path'
+      end
+    end
+
+    def test_seeds_path_if_Rails_exists
+      Dibber.const_set :Rails, DummyRails
+      Seeder.seeds_path = nil
+      assert_equal '/some/path/db/seeds', Seeder.seeds_path
+      Dibber.send(:remove_const, :Rails)
+    end
     
     
     private

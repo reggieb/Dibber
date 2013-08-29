@@ -28,11 +28,11 @@ module Dibber
     end
 
     def self.seeds_path
-      @seeds_path || raise_no_seeds_path_error
+      @seeds_path || try_to_guess_seeds_path || raise_no_seeds_path_error
     end
 
     def self.seeds_path=(path)
-      path = path + '/' unless path =~ /\/$/
+      path = path + '/' if path and path !~ /\/$/
       @seeds_path = path
     end
 
@@ -77,6 +77,10 @@ module Dibber
     
     def retrieval_method
       "find_or_initialize_by_#{name_method}"
+    end
+
+    def self.try_to_guess_seeds_path
+      return File.expand_path('db/seeds', Rails.root) if defined? Rails
     end
 
   end
