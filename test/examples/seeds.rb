@@ -1,7 +1,13 @@
+require_relative '../../lib/dibber'
+
+models = %w{borough admin_user fee disclaimer category}
+models.each {|model| require_relative "models/#{model}"}
+
+
 Seeder = Dibber::Seeder
 
 # Set up the path to seed YAML files
-Seeder.seeds_path = "#{Rails.root}/db/seeds"
+Seeder.seeds_path = File.expand_path('seeds', File.dirname(__FILE__))
 
 # Example 1. Seeder is used to monitor the process 
 # and grab the attributes from the YAML file
@@ -30,13 +36,22 @@ Seeder.new(Fee, 'fees.yml').build
 # Example 4. Seeder using an alternative name field
 Seeder.new(Fee, 'fees.yml', :name_method => :title).build
 
-# Example 5. Seeder working with a name spaced object
+# Example 5. If the seed file's name is the lower case plural of the class name
+# you can use the seed method:
+Seeder.seed(:fee)
+
+# Example 6. Seeder working with a name-spaced object
 Seeder.new(Disclaimer::Document, 'disclaimer/documents.yml').build
 
-# Example 6. Seeder using values in the yaml file to set a single field
+# Example 7. You can also use the seed method with name-spaced objects.
+# In this case the seed files need to be in a name-spaced path (see previous
+# example)
+Seeder.seed('disclaimer/document')
+
+# Example 8. Seeder using values in the yaml file to set a single field
 Seeder.new(Category, 'categories.yml', 'description').build
 
-# Example 7. Seeder using alternative name and attributes fields
+# Example 9. Seeder using alternative name and attributes fields
 Seeder.new(
   Category, 
   'categories.yml', 
@@ -44,8 +59,9 @@ Seeder.new(
   :attributes_method => :description
 ).build
 
-# You can also access Seeders attached process log, and set up a custom log
-Seeder.process_log.start('First questionnaire questions', 'Questionnaire.count > 0 ? Questionnaire.first.questions.length : 0')
+# Example 10. You can also access Seeders attached process log, and set up a
+# custom log
+Seeder.process_log.start('Time to end of report', 'Time.now')
 
 # Output a report showing how the numbers of each type of object
 # have changed through the process. Also has a log of start and end time.

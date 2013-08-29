@@ -122,6 +122,38 @@ module Dibber
       assert_equal({'title' => 'one'}, foo.attributes)
     end
 
+    def test_seed
+      assert_equal(0, Thing.count)
+      Seeder.seed(:things)
+      assert_equal(2, Thing.count)
+      foo = Thing.find_or_initialize_by_name(:foo)
+      bar = Thing.find_or_initialize_by_name(:bar)
+      assert_equal([foo, bar], Thing.saved)
+      assert_equal({'title' => 'one'}, foo.attributes)
+    end
+
+     def test_seed_with_alternative_name_method
+      Seeder.seed(:things, :name_method => 'other_method')
+      assert_equal(2, Thing.count)
+      foo = Thing.find_or_initialize_by_other_method(:foo)
+      bar = Thing.find_or_initialize_by_other_method(:bar)
+      assert_equal([foo, bar], Thing.saved)
+      assert_equal({'title' => 'one'}, foo.attributes)
+    end
+
+    def test_seed_with_non_existent_class
+      assert_raise NameError do
+        Seeder.seed(:non_existent_class)
+      end
+    end
+
+    def test_seed_with_non_existent_seed_file
+      no_file_found_error = Errno::ENOENT
+      assert_raise no_file_found_error do
+        Seeder.seed(:array)
+      end
+    end
+
     def test_seeds_path_with_none_set
       Seeder.seeds_path = nil
       assert_raise RuntimeError do

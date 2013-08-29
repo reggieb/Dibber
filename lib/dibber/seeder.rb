@@ -5,6 +5,13 @@ module Dibber
   class Seeder
     attr_accessor :klass, :file, :attribute_method, :name_method, :overwrite
 
+    def self.seed(name, args = {})
+      class_name = name.to_s.strip.classify
+      klass = (/\A\w+(::\w+)+\Z/ =~ class_name) ? eval(class_name) : Kernel.const_get(class_name)
+      file = "#{name.to_s.pluralize}.yml"
+      new(klass, file, args).build
+    end
+
     def self.process_log
       @process_log || start_process_log
     end
@@ -47,8 +54,8 @@ module Dibber
     end
 
     def build
-      start_log
       check_objects_exist
+      start_log
       objects.each do |name, attributes|
         object = klass.send(retrieval_method, name)
         if overwrite or object.new_record?

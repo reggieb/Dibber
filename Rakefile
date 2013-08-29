@@ -15,5 +15,5 @@ Rake::RDocTask.new do |rdoc|
 end
 
 Rake::TestTask.new do |t|
-  t.test_files = FileList['test/**/*.rb']
+  t.test_files = FileList['test/dibber/**/*.rb']
 end
