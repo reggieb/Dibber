@@ -1,9 +1,13 @@
 module Dibber
-  VERSION = "0.2.2"
+  VERSION = "0.3.0"
 end
 
 # History
 # =======
+# 0.3.0 Adds seed method
+#       Allows seeding to be carried out via Dibber::Seeder.seed(:thing).
+#       Also tidies up examples
+#
 # 0.2.2 Minor bug fix. There was an error in the example. Also a small bit
 #       of house keeping (adding license to gemspec, and removing Gemfile.lock
 #       from repository.

@@ -44,5 +44,11 @@ module Dibber
       expected = ['No finish was 1, now 1.']
       assert_equal(expected, @process_log.report)
     end
+
+    def test_exists_method
+      assert !@process_log.exists?(:one), "There should not be a log for :one yet"
+      test_one
+      assert @process_log.exists?(:one), "There should be log for :one"
+    end
   end
 end

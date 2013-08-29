@@ -29,5 +29,9 @@ module Dibber
       return @report
     end
 
+    def exists?(name)
+      @log.keys.include?(name)
+    end
+
   end
 end

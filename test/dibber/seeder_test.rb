@@ -9,7 +9,7 @@ module Dibber
   class SeederTest < Test::Unit::TestCase
     
     def setup
-      Seeder.seeds_path = File.join(File.dirname(__FILE__),'seeds')
+      Seeder.seeds_path = File.join(File.dirname(__FILE__), 'seeds')
     end
     
     def teardown
@@ -159,6 +159,13 @@ module Dibber
       assert_raise RuntimeError do
         Seeder.seeds_path
       end
+    end
+
+    def test_process_log_not_reset_by_second_seed_process_on_same_class
+      Seeder.seed(:things)
+      original_start = Seeder.process_log.raw[:things][:start]
+      Seeder.seed(:things)
+      assert_equal original_start, Seeder.process_log.raw[:things][:start]
     end
 
     module DummyRails

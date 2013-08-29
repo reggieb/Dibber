@@ -1,4 +1,4 @@
-require_relative '../dibber/process_log'
+require_relative '../../lib/dibber/process_log'
 
 process_log = Dibber::ProcessLog.new
 process_log.start :time_one, 'Time.now'

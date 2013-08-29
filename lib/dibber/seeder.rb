@@ -7,9 +7,9 @@ module Dibber
 
     def self.seed(name, args = {})
       class_name = name.to_s.strip.classify
-      klass = (/\A\w+(::\w+)+\Z/ =~ class_name) ? eval(class_name) : Kernel.const_get(class_name)
-      file = "#{name.to_s.pluralize}.yml"
-      new(klass, file, args).build
+      new_klass = (/\A\w+(::\w+)+\Z/ =~ class_name) ? eval(class_name) : Kernel.const_get(class_name)
+      new_file = "#{name.to_s.pluralize}.yml"
+      new(new_klass, new_file, args).build
     end
 
     def self.process_log
@@ -27,7 +27,10 @@ module Dibber
     end
 
     def self.monitor(klass)
-      process_log.start(klass.to_s.tableize.to_sym, "#{klass}.count")
+      log_name = klass.to_s.tableize.to_sym
+      unless process_log.exists?(log_name)
+        process_log.start(log_name, "#{klass}.count")
+      end
     end
 
     def self.objects_from(file)
