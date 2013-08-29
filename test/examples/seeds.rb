@@ -49,15 +49,14 @@ Seeder.new(Disclaimer::Document, 'disclaimer/documents.yml').build
 Seeder.seed('disclaimer/document')
 
 # Example 8. Seeder using values in the yaml file to set a single field
-Seeder.new(Category, 'categories.yml', 'description').build
+Seeder.seed(:category, 'description')
 
 # Example 9. Seeder using alternative name and attributes fields
-Seeder.new(
-  Category, 
-  'categories.yml', 
+Seeder.seed(
+  :category,
   :name_method => :title, 
   :attributes_method => :description
-).build
+)
 
 # Example 10. You can also access Seeders attached process log, and set up a
 # custom log

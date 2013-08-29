@@ -177,7 +177,7 @@ module Dibber
     def test_seeds_path_if_Rails_exists
       Dibber.const_set :Rails, DummyRails
       Seeder.seeds_path = nil
-      assert_equal '/some/path/db/seeds', Seeder.seeds_path
+      assert_equal '/some/path/db/seeds/', Seeder.seeds_path
       Dibber.send(:remove_const, :Rails)
     end
     

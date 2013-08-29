@@ -77,7 +77,7 @@ Seeder#build will not overwrite existing data unless directed to do so.
 
 == Using alternative class and field name mappings
 
-Seeder.seed calls Seeder.build to build the objects defined in the seed files.
+Seeder.seed calls Seeder#build to build the objects defined in the seed files.
 You can call the build method directly if your seed file names do not match
 the class name:
 

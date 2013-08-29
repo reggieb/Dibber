@@ -42,10 +42,8 @@ module Dibber
     end
 
     def self.seeds_path=(path)
-      path = path + '/' if path and path !~ /\/$/
-      @seeds_path = path
+      @seeds_path = add_trailing_slash_to(path)
     end
-
 
     def initialize(klass, file, args = {})
       @klass = klass
@@ -90,7 +88,14 @@ module Dibber
     end
 
     def self.try_to_guess_seeds_path
-      return File.expand_path('db/seeds', Rails.root) if defined? Rails
+      path = File.expand_path('db/seeds', Rails.root) if defined? Rails
+      add_trailing_slash_to(path)
+    end
+
+
+    def self.add_trailing_slash_to(path = nil)
+      path = path + '/' if path and path !~ /\/$/
+      path
     end
 
   end
