@@ -71,7 +71,7 @@ Seeder#build will not overwrite existing data unless directed to do so.
    Seeder.seed :thing
    thing.reload.colour  ----> 'black'
 
-   Seeder.seed(:thing, :overwrite => true).build
+   Seeder.seed(:thing, :overwrite => true)
    thing.reload.colour  ----> 'red'
 
 
