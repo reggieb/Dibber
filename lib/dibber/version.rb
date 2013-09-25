@@ -1,9 +1,11 @@
 module Dibber
-  VERSION = "0.3.0"
+  VERSION = "0.3.1"
 end
 
 # History
 # =======
+# 0.3.1 Adds error messages when object save fails
+#
 # 0.3.0 Adds seed method
 #       Allows seeding to be carried out via Dibber::Seeder.seed(:thing).
 #       Also tidies up examples

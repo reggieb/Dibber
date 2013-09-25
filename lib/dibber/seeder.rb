@@ -23,7 +23,7 @@ module Dibber
     end
 
     def self.report
-      process_log.report
+      process_log.report + error_report
     end
 
     def self.monitor(klass)
@@ -61,7 +61,9 @@ module Dibber
         object = klass.send(retrieval_method, name)
         if overwrite or object.new_record?
           object.send("#{attribute_method}=", attributes) 
-          object.save
+          unless object.save
+            self.class.errors << object.errors
+          end
         end
       end
     end
@@ -72,6 +74,15 @@ module Dibber
 
     def objects
       @objects ||= self.class.objects_from(file)
+    end
+
+    def self.errors
+      @errors ||= []
+    end
+
+    def self.error_report
+      return [] if errors.empty?
+      ["#{errors.length} errors detected:", errors.collect(&:inspect)].flatten
     end
 
     private
