@@ -13,7 +13,7 @@ Seeder.seeds_path = File.expand_path('seeds', File.dirname(__FILE__))
 # and grab the attributes from the YAML file
 Seeder.monitor Borough
 Seeder.objects_from("boroughs.yml").each do |holder, borough|
-  Borough.find_or_create_by_name(borough)
+  Borough.find_or_initialize_by(name: borough).save
 end
 
 # Example 2. Seeder is only used to monitor the process
@@ -21,10 +21,10 @@ Seeder.monitor AdminUser
 admin_email = 'admin@undervale.co.uk'
 password = 'change_me'
 AdminUser.create!(
-  :email => admin_email,
-  :password => password,
-  :password_confirmation => password
-) unless AdminUser.exists?(:email => admin_email)
+  email: admin_email,
+  password: password,
+  password_confirmation: password
+) unless AdminUser.exists?(email: admin_email)
 
 # Example 3. Seeder grabs the attributes from the YAML and builds a 
 # set of Fee objects with those attributes (or updates them if 
@@ -54,8 +54,8 @@ Seeder.seed(:category, 'description')
 # Example 9. Seeder using alternative name and attributes fields
 Seeder.seed(
   :category,
-  :name_method => :title, 
-  :attributes_method => :description
+  name_method: :title, 
+  attributes_method: :description
 )
 
 # Example 10. You can also access Seeders attached process log, and set up a

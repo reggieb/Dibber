@@ -45,7 +45,7 @@ Seeder will create two new things.
 
 You'll then be able to do this:
 
-    thing = Thing.find_by_name(:foo)
+    thing = Thing.find_by(name: 'foo')
     thing.colour    ---> 'red'
 
 === Outside Rails
@@ -56,7 +56,7 @@ specify the location of the seed files.
     Seeder.seeds_path = "some/path/to/seeds"
 
 You can also use this technique in Rails if you want to put your seed files
-in an alternative folder to 'db/seeds'
+in a folder other than 'db/seeds'
  
 == Report  
  
@@ -71,7 +71,7 @@ Seeder#build will not overwrite existing data unless directed to do so.
    Seeder.seed :thing
    thing.reload.colour  ----> 'black'
 
-   Seeder.seed(:thing, :overwrite => true)
+   Seeder.seed(:thing, overwrite: true)
    thing.reload.colour  ----> 'red'
 
 
