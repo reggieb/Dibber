@@ -1,9 +1,12 @@
 module Dibber
-  VERSION = "0.3.1"
+  VERSION = "0.4.0"
 end
 
 # History
 # =======
+# 0.4.0 Removes dependency on find_or_initialize_by_name type ActiveRecord
+#       dynamic methods that are no longer supported in Rails
+# 
 # 0.3.1 Adds error messages when object save fails
 #
 # 0.3.0 Adds seed method

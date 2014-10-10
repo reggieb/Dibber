@@ -1,11 +1,17 @@
 # Mock ActiveRecord::Base
 class NotQuiteActiveRecord
-  attr_reader :name
-  attr_accessor :attributes
+  attr_accessor :name, :title, :other_method, :attributes
 
-  def initialize(name = nil)
-    @name = name.to_s if name
+  def initialize(args = {})
+    @attributes = args
+    extract_attributes
     self.class.members << self
+  end
+  
+  def extract_attributes
+    attributes.each do |name, value|
+      self.send("#{name}=", value.to_s) if self.respond_to?(name.to_sym)
+    end
   end
 
   def save
@@ -16,39 +22,16 @@ class NotQuiteActiveRecord
   def new_record?
     !self.class.saved.include? self
   end
-
-  def self.find_or_initialize_by_name(name)
-    existing = members.select{|m| m.name == name.to_s}
-    if existing.empty?
-      new(name)
-    else
-      existing.first
-    end
+  
+  def self.where(hash)
+    members.select{|m| hash.collect{|k, v| m.send(k) == v.to_s}.uniq == [true]}
   end
-
-  def self.find_or_initialize_by_title(title)
-    existing = members.select{|m| m.title == title.to_s}
-    if existing.empty?
-      fee = new
-      fee.title = title
-      fee
+  
+  def self.find_or_initialize_by(hash)
+    if exists?(hash)
+      where(hash).first
     else
-      existing.first
-    end
-  end
-
-  def self.find_or_create_by_name(name)
-    find_or_initialize_by_name(name).save
-  end
-
-  def self.find_or_initialize_by_other_method(data)
-    existing = members.select{|m| m.other_method == data.to_s}
-    if existing.empty?
-      thing = new
-      thing.other_method = data.to_s
-      thing
-    else
-      existing.first
+      new(hash)
     end
   end
 

@@ -58,7 +58,7 @@ module Dibber
       check_objects_exist
       start_log
       objects.each do |name, attributes|
-        object = klass.send(retrieval_method, name)
+        object = find_or_initialize_by(name)
         if overwrite or object.new_record?
           object.send("#{attribute_method}=", attributes) 
           unless object.save
@@ -94,8 +94,16 @@ module Dibber
       raise "No objects returned from file: #{self.class.seeds_path}#{file}" unless objects
     end
     
-    def retrieval_method
-      "find_or_initialize_by_#{name_method}"
+    def find_or_initialize_by(name)
+      if klass.exists?(name_method_sym => name)
+        klass.where(name_method_sym => name).first
+      else
+        klass.new(name_method_sym => name)
+      end
+    end
+    
+    def name_method_sym
+      name_method.to_sym
     end
 
     def self.try_to_guess_seeds_path

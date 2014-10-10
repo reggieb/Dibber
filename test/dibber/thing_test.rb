@@ -13,14 +13,14 @@ module Dibber
     
     def test_find_or_initialize_by_name
       @name = 'foo'
-      @thing = Thing.find_or_initialize_by_name(@name)
+      @thing = Thing.find_or_initialize_by(name: @name)
       assert_equal(@name, @thing.name)
     end
     
     def test_find_or_initialize_by_name_with_symbol
       test_find_or_initialize_by_name
       assert_equal(1, Thing.count)
-      thing = Thing.find_or_initialize_by_name(:foo)
+      thing = Thing.find_or_initialize_by(name: :foo)
       assert_equal(1, Thing.count)
       assert_equal('foo', thing.name)
     end
@@ -33,7 +33,7 @@ module Dibber
     
     def test_count
       assert_equal(0, Thing.count)
-      Thing.find_or_initialize_by_name(:thing_for_count_test)
+      Thing.find_or_initialize_by(name: :thing_for_count_test)
       assert_equal(1, Thing.count)
     end
     
@@ -52,7 +52,7 @@ module Dibber
     end
     
     def test_save_and_saved
-      thing = Thing.find_or_initialize_by_name(:thing_for_save_test)
+      thing = Thing.find_or_initialize_by(name: :thing_for_save_test)
       assert !Thing.saved.include?(thing), 'saved things should not include thing'
       assert thing.save, 'should return true on save'
       assert Thing.saved.include?(thing), 'saved things should include thing'
@@ -71,7 +71,7 @@ module Dibber
     end
     
     def test_find_or_initialize_by_other_method
-      thing = Thing.find_or_initialize_by_other_method(:something)
+      thing = Thing.find_or_initialize_by(other_method: :something)
       assert_nil(thing.name)
       assert_equal('something', thing.other_method)
     end
