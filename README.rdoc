@@ -21,9 +21,9 @@ Add this to your Gemfile:
 
 === Rails Examples
 
-You have a rails app with a Thing model, and you want to seed it with some 
-things. Thing instances have the attributes 'name', 'colour', 'size'.
-You have a YAML file 'db/seeds/things.yml' that looks like this:
+You have a rails app with a `Thing` model, and you want to seed it with some
+things. `Thing` instances have the attributes `name`, `colour`, `size`.
+You have a YAML file `db/seeds/things.yml` that looks like this:
 
     foo:
       colour: red
@@ -36,36 +36,26 @@ You have a YAML file 'db/seeds/things.yml' that looks like this:
 Add this to your 'db/seeds.rb'
 
     Seeder = Dibber::Seeder
-    Seeder.seed :thing
+    Seeder.seed Thing
     puts Seeder.report
 
-Then run 'rake db:seed'
+Then run `rake db:seed`
 
-Seeder will create two new things. 
+Seeder will create two new things.
 
 You'll then be able to do this:
 
     thing = Thing.find_by(name: 'foo')
     thing.colour    ---> 'red'
 
-=== Outside Rails
+== Report
 
-Dibber can be used outside of Rails, but in this case you will need to
-specify the location of the seed files.
-
-    Seeder.seeds_path = "some/path/to/seeds"
-
-You can also use this technique in Rails if you want to put your seed files
-in a folder other than 'db/seeds'
- 
-== Report  
- 
 Seeder.report outputs a report detailing start and end time, and a log of how
 the number of things has changed
 
 == Overwriting existing entries
 
-Seeder#build will not overwrite existing data unless directed to do so. 
+Seeder#build will not overwrite existing data unless directed to do so.
 
    thing.update_attribute(:colour, 'black')
    Seeder.seed :thing
@@ -82,6 +72,16 @@ You can call the build method directly if your seed file names do not match
 the class name:
 
     Seeder.new(Thing, 'other_things.yml').build
+
+== Outside Rails
+
+Dibber can be used outside of Rails, but in this case you will need to
+specify the location of the seed files.
+
+    Seeder.seeds_path = "some/path/to/seeds"
+
+You can also use this technique in Rails if you want to put your seed files
+in a folder other than 'db/seeds'
 
 == More examples
 

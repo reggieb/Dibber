@@ -9,7 +9,7 @@ Seeder = Dibber::Seeder
 # Set up the path to seed YAML files
 Seeder.seeds_path = File.expand_path('seeds', File.dirname(__FILE__))
 
-# Example 1. Seeder is used to monitor the process 
+# Example 1. Seeder is used to monitor the process
 # and grab the attributes from the YAML file
 Seeder.monitor Borough
 Seeder.objects_from("boroughs.yml").each do |holder, borough|
@@ -26,10 +26,10 @@ AdminUser.create!(
   password_confirmation: password
 ) unless AdminUser.exists?(email: admin_email)
 
-# Example 3. Seeder grabs the attributes from the YAML and builds a 
-# set of Fee objects with those attributes (or updates them if 
-# they already exist). 
-# Note that the build process defaults to using a 'name' field to store 
+# Example 3. Seeder grabs the attributes from the YAML and builds a
+# set of Fee objects with those attributes (or updates them if
+# they already exist).
+# Note that the build process defaults to using a 'name' field to store
 # the root key.
 Seeder.new(Fee, 'fees.yml').build
 
@@ -38,7 +38,10 @@ Seeder.new(Fee, 'fees.yml', :name_method => :title).build
 
 # Example 5. If the seed file's name is the lower case plural of the class name
 # you can use the seed method:
-Seeder.seed(:fee)
+Seeder.seed :fee
+
+# Alternatively pass in the class:
+Seeder.seed Fee
 
 # Example 6. Seeder working with a name-spaced object
 Seeder.new(Disclaimer::Document, 'disclaimer/documents.yml').build
@@ -46,7 +49,10 @@ Seeder.new(Disclaimer::Document, 'disclaimer/documents.yml').build
 # Example 7. You can also use the seed method with name-spaced objects.
 # In this case the seed files need to be in a name-spaced path (see previous
 # example)
-Seeder.seed('disclaimer/document')
+Seeder.seed 'disclaimer/document'
+
+# or if you prefer to pass in the class:
+Seeder.seed Disclaimer::Document
 
 # Example 8. Seeder using values in the yaml file to set a single field
 Seeder.seed(:category, 'description')
@@ -54,7 +60,7 @@ Seeder.seed(:category, 'description')
 # Example 9. Seeder using alternative name and attributes fields
 Seeder.seed(
   :category,
-  name_method: :title, 
+  name_method: :title,
   attributes_method: :description
 )
 

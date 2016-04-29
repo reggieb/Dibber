@@ -7,11 +7,16 @@ module Dibber
 
     class << self
 
-      def seed(name, args = {})
-        class_name = name.to_s.strip.classify
-        new_klass = (/\A\w+(::\w+)+\Z/ =~ class_name) ? eval(class_name) : Kernel.const_get(class_name)
-        new_file = "#{name.to_s.pluralize}.yml"
-        new(new_klass, new_file, args).build
+      def seed(klass, args = {})
+        if klass.kind_of?(String) || klass.kind_of?(Symbol)
+          name = klass.to_s
+          class_name = klass.to_s.strip.classify
+          klass = Kernel.const_get(class_name)
+        else
+          name = klass.to_s.underscore
+        end
+        new_file = "#{name.pluralize}.yml"
+        new(klass, new_file, args).build
       end
 
       def process_log
