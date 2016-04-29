@@ -1,5 +1,6 @@
 require 'test_helper'
 require_relative 'thing'
+require_relative 'foo/bar'
 
 module Dibber
 
@@ -11,6 +12,7 @@ module Dibber
 
     def teardown
       Thing.clear_all
+      Foo::Bar.clear_all
     end
 
     def test_process_log
@@ -156,6 +158,56 @@ module Dibber
       assert_raises no_file_found_error do
         Seeder.seed(:array)
       end
+    end
+
+    def test_seed_with_sub_class_string
+      assert_equal(0, Foo::Bar.count)
+      Seeder.seed('foo/bar')
+      assert_equal(1, Foo::Bar.count)
+      bar = Foo::Bar.find_or_initialize_by(name: :some)
+      assert_equal([bar], Foo::Bar.saved)
+      assert_equal({'title' => 'thing'}, bar.attributes)
+    end
+
+    def test_seed_with_class
+      assert_equal(0, Thing.count)
+      Seeder.seed(Thing)
+      assert_equal(2, Thing.count)
+      foo = Thing.find_or_initialize_by(name: :foo)
+      bar = Thing.find_or_initialize_by(name: :bar)
+      assert_equal([foo, bar], Thing.saved)
+      assert_equal({'title' => 'one'}, foo.attributes)
+    end
+
+     def test_seed_with_class_with_alternative_name_method
+      Seeder.seed(Thing, :name_method => 'other_method')
+      assert_equal(2, Thing.count)
+      foo = Thing.find_or_initialize_by(other_method: :foo)
+      bar = Thing.find_or_initialize_by(other_method: :bar)
+      assert_equal([foo, bar], Thing.saved)
+      assert_equal({'title' => 'one'}, foo.attributes)
+    end
+
+    def test_seed_with_class_that_does_not_exist
+      assert_raises NameError do
+        Seeder.seed(NonExistentClass)
+      end
+    end
+
+    def test_seed_with_class_with_non_existent_seed_file
+      no_file_found_error = Errno::ENOENT
+      assert_raises no_file_found_error do
+        Seeder.seed(Array)
+      end
+    end
+
+    def test_seed_with_sub_class
+      assert_equal(0, Foo::Bar.count)
+      Seeder.seed(Foo::Bar)
+      assert_equal(1, Foo::Bar.count)
+      bar = Foo::Bar.find_or_initialize_by(name: :some)
+      assert_equal([bar], Foo::Bar.saved)
+      assert_equal({'title' => 'thing'}, bar.attributes)
     end
 
     def test_seeds_path_with_none_set
