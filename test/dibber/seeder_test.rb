@@ -1,12 +1,9 @@
-$:.unshift File.join(File.dirname(__FILE__),'../..','lib')
-
-require 'test/unit'
-require 'dibber'
+require 'test_helper'
 require_relative 'thing'
 
 module Dibber
 
-  class SeederTest < Test::Unit::TestCase
+  class SeederTest < Minitest::Test
 
     def setup
       Seeder.seeds_path = File.join(File.dirname(__FILE__), 'seeds')
@@ -31,8 +28,15 @@ module Dibber
     end
 
     def test_monitor
+      Seeder.clear_process_log
       Seeder.monitor(Thing)
-      assert_equal({:command => 'Thing.count', :start => Thing.count}, Seeder.process_log.raw[:things])
+      assert_equal({command: 'Thing.count', start: Thing.count}, Seeder.process_log.raw[:things])
+    end
+
+    def test_clear_process_log
+      test_monitor
+      Seeder.clear_process_log
+      assert_equal(nil, Seeder.process_log.raw[:things])
     end
 
     def test_seeds_path
@@ -56,7 +60,7 @@ module Dibber
 
     def test_build_with_no_objects
       thing_seeder = Seeder.new(Thing, 'empty.yml')
-      assert_raise RuntimeError do
+      assert_raises RuntimeError do
         thing_seeder.build
       end
     end
@@ -142,21 +146,21 @@ module Dibber
     end
 
     def test_seed_with_non_existent_class
-      assert_raise NameError do
+      assert_raises NameError do
         Seeder.seed(:non_existent_class)
       end
     end
 
     def test_seed_with_non_existent_seed_file
       no_file_found_error = Errno::ENOENT
-      assert_raise no_file_found_error do
+      assert_raises no_file_found_error do
         Seeder.seed(:array)
       end
     end
 
     def test_seeds_path_with_none_set
       Seeder.seeds_path = nil
-      assert_raise RuntimeError do
+      assert_raises RuntimeError do
         Seeder.seeds_path
       end
     end

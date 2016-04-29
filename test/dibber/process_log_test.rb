@@ -1,13 +1,10 @@
-$:.unshift File.join(File.dirname(__FILE__),'../..','lib')
-
-require 'test/unit'
+require 'test_helper'
 require 'dibber'
 
 module Dibber
-  class ProcessLogTest < Test::Unit::TestCase
+  class ProcessLogTest < Minitest::Test
     def setup
       @process_log = ProcessLog.new
-
     end
 
     def test_one

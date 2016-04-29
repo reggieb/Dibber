@@ -13,6 +13,7 @@ Gem::Specification.new do |s|
   s.license = 'MIT-LICENSE'
   s.files = Dir["lib/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["test/**/*"]
-  
-  s.add_development_dependency 'active_support'
+
+  s.add_development_dependency 'activesupport'
+  spec.add_development_dependency "minitest", "~> 5.0"
 end
