@@ -48,6 +48,27 @@ You'll then be able to do this:
     thing = Thing.find_by(name: 'foo')
     thing.colour    ---> 'red'
 
+=== Pass the name of the class to seed
+
+All of these are equivalent commands
+
+    Dibber::Seeder.seed Thing
+    Dibber::Seeder.seed :thing
+    Dibber::Seeder.seed 'Thing'
+
+=== Dynamic content
+
+Seed content can also have dynamic content added via ERB. For example, if
+you want the colour of the `foo` thing to be either 'red' or 'yellow', change
+`db/seeds/things.yml` to
+
+    foo:
+      colour: <%= ['red', 'yellow'].sample %>
+      size: large
+
+Then when we run `Dibber::Seeder.seed :thing` a new `Thing` will be created
+with the colour set to either 'red' or 'yellow'.
+
 == Report
 
 Seeder.report outputs a report detailing start and end time, and a log of how

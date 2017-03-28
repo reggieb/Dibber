@@ -1,9 +1,12 @@
 module Dibber
-  VERSION = "0.5.0"
+  VERSION = "0.6.0"
 end
 
 # History
 # =======
+# 0.6.0 ERB parse the source files before passing it to YAML. Allows dynamic
+#       content to be used.
+#
 # 0.5.0 Allow the `Seeder.seed` method to take a Class or the string/symbol
 #       representation of the class name.
 #

@@ -38,7 +38,7 @@ module Dibber
     def test_clear_process_log
       test_monitor
       Seeder.clear_process_log
-      assert_equal(nil, Seeder.process_log.raw[:things])
+      assert_nil Seeder.process_log.raw[:things], "Log should be empty"
     end
 
     def test_seeds_path
@@ -179,7 +179,17 @@ module Dibber
       assert_equal({'title' => 'one'}, foo.attributes)
     end
 
-     def test_seed_with_class_with_alternative_name_method
+    def test_seed_with_class_name
+      assert_equal(0, Thing.count)
+      Seeder.seed('Thing')
+      assert_equal(2, Thing.count)
+      foo = Thing.find_or_initialize_by(name: :foo)
+      bar = Thing.find_or_initialize_by(name: :bar)
+      assert_equal([foo, bar], Thing.saved)
+      assert_equal({'title' => 'one'}, foo.attributes)
+    end
+
+    def test_seed_with_class_with_alternative_name_method
       Seeder.seed(Thing, :name_method => 'other_method')
       assert_equal(2, Thing.count)
       foo = Thing.find_or_initialize_by(other_method: :foo)
@@ -244,7 +254,7 @@ module Dibber
     end
 
     def thing_file_path
-      File.join(File.dirname(__FILE__),'seeds', 'things.yml')
+      File.join(File.dirname(__FILE__), 'seeds', 'things.yml')
     end
   end
 

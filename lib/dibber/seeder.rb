@@ -1,5 +1,6 @@
 require 'active_support/inflector'
 require 'yaml'
+require 'erb'
 
 module Dibber
   class Seeder
@@ -9,7 +10,7 @@ module Dibber
 
       def seed(klass, args = {})
         if klass.kind_of?(String) || klass.kind_of?(Symbol)
-          name = klass.to_s
+          name = klass.to_s.underscore
           class_name = klass.to_s.strip.classify
           klass = Kernel.const_get(class_name)
         else
@@ -39,7 +40,15 @@ module Dibber
       end
 
       def objects_from(file)
-        YAML.load_file("#{seeds_path}#{file}")
+        YAML.load erb_processed(file_content(file))
+      end
+
+      def erb_processed(content)
+        ERB.new(content).result
+      end
+
+      def file_content(file)
+        File.read File.join(seeds_path, file)
       end
 
       def seeds_path
