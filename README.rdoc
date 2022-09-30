@@ -69,6 +69,18 @@ you want the colour of the `foo` thing to be either 'red' or 'yellow', change
 Then when we run `Dibber::Seeder.seed :thing` a new `Thing` will be created
 with the colour set to either 'red' or 'yellow'.
 
+=== Using blocks with Seeder
+
+If you pass a block to `.seed` the block will be called on each object being
+built as it is created or updated.
+
+So for example, if Thing has attributes `size` and `big` the following is
+possible:
+
+    Dibber::Seeder.seed(:thing) do |thing|
+      thing.big = thing.attributes['size'] > 10
+    end
+
 == Report
 
 Seeder.report outputs a report detailing start and end time, and a log of how
@@ -115,9 +127,3 @@ If you clone this app, you can run this example at the project root:
 There is also an example of process log usage:
 
     ruby test/examples/process_logs.rb
-
-
-
-
-
-

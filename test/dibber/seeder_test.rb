@@ -71,10 +71,18 @@ module Dibber
       assert_equal(0, Thing.count)
       thing_seeder.build
       assert_equal(2, Thing.count)
-      foo = Thing.find_or_initialize_by(name:  :foo)
+      foo = Thing.find_or_initialize_by(name: :foo)
       bar = Thing.find_or_initialize_by(name: :bar)
       assert_equal([foo, bar], Thing.saved)
       assert_equal({'title' => 'one'}, foo.attributes)
+    end
+
+    def test_build_with_block
+      other = 'other'
+      thing_seeder.build { |t| t.other_method = other }
+      foo = Thing.find_or_initialize_by(name: :foo)
+      bar = Thing.find_or_initialize_by(name: :bar)
+      assert_equal([foo, bar], Thing.where(other_method: other))
     end
 
     def test_rebuilding_does_not_overwrite
@@ -138,7 +146,22 @@ module Dibber
       assert_equal({'title' => 'one'}, foo.attributes)
     end
 
-     def test_seed_with_alternative_name_method
+    def test_seed_with_block
+      other = 'other'
+      Seeder.seed(:things) { |thing| thing.other_method = other }
+      foo = Thing.find_or_initialize_by(name: :foo)
+      bar = Thing.find_or_initialize_by(name: :bar)
+      assert_equal([foo, bar], Thing.where(other_method: other))
+    end
+
+    def test_seed_with_block_using_attributes
+      other = 'other'
+      Seeder.seed(:things) { |thing| thing.other_method = thing.attributes['title'] }
+      foo = Thing.find_or_initialize_by(name: :foo)
+      assert_equal('one', foo.other_method)
+    end
+
+    def test_seed_with_alternative_name_method
       Seeder.seed(:things, :name_method => 'other_method')
       assert_equal(2, Thing.count)
       foo = Thing.find_or_initialize_by(other_method: :foo)

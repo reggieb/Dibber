@@ -7,7 +7,7 @@ class NotQuiteActiveRecord
     extract_attributes
     self.class.members << self
   end
-  
+
   def extract_attributes
     attributes.each do |name, value|
       self.send("#{name}=", value.to_s) if self.respond_to?(name.to_sym)
@@ -22,11 +22,11 @@ class NotQuiteActiveRecord
   def new_record?
     !self.class.saved.include? self
   end
-  
+
   def self.where(hash)
     members.select{|m| hash.collect{|k, v| m.send(k) == v.to_s}.uniq == [true]}
   end
-  
+
   def self.find_or_initialize_by(hash)
     if exists?(hash)
       where(hash).first

@@ -1,9 +1,11 @@
 module Dibber
-  VERSION = "0.6.0"
+  VERSION = "0.7.0"
 end
 
 # History
 # =======
+# 0.7.0 Adds ability to pass blocks into Seeder.seed and Seed#build
+#
 # 0.6.0 ERB parse the source files before passing it to YAML. Allows dynamic
 #       content to be used.
 #

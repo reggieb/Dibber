@@ -8,7 +8,7 @@ module Dibber
 
     class << self
 
-      def seed(klass, args = {})
+      def seed(klass, args = {}, &block)
         if klass.kind_of?(String) || klass.kind_of?(Symbol)
           name = klass.to_s.underscore
           class_name = klass.to_s.strip.classify
@@ -17,7 +17,7 @@ module Dibber
           name = klass.to_s.underscore
         end
         new_file = "#{name.pluralize}.yml"
-        new(klass, new_file, args).build
+        new(klass, new_file, args).build(&block)
       end
 
       def process_log
@@ -72,14 +72,16 @@ module Dibber
     def build
       check_objects_exist
       start_log
-      objects.each do |name, attributes|
+      objects.map do |name, attributes|
         object = find_or_initialize_by(name)
         if overwrite or object.new_record?
           object.send("#{attribute_method}=", attributes)
+          yield(object) if block_given?
           unless object.save
             self.class.errors << object.errors
           end
         end
+        object
       end
     end
 
